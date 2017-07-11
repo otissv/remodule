@@ -1,0 +1,38 @@
+{
+  "name": "option-chain",
+  "version": "0.1.1",
+  "description": "Use fluent property chains in lieu of options objects",
+  "license": "MIT",
+  "repository": "jamestalmage/option-chain",
+  "author": {
+    "name": "James Talmage",
+    "email": "james@talmage.io",
+    "url": "github.com/jamestalmage"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && nyc --cache --reporter=lcov --reporter=text ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "option",
+    "options",
+    "chain",
+    "chains",
+    "chainable",
+    "fluent"
+  ],
+  "devDependencies": {
+    "ava": "^0.10.0",
+    "coveralls": "^2.11.6",
+    "nyc": "^5.3.0",
+    "xo": "^0.12.1"
+  },
+  "dependencies": {
+    "object-assign": "^4.0.1"
+  }
+}
