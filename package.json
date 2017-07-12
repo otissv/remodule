@@ -1,6 +1,6 @@
 {
   "name": "remodule",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Taming Redux with modules",
   "main": "dist/remodule",
   "keywords": ["redux", "react", "modules"],

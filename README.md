@@ -7,7 +7,7 @@
 Remodule works the same as [Redux](http://redux.js.org/) but removes the tedious tasks of organizing, splitting and collating files. Also does away with the need for constants.
 
 ## Installation
-npm install remodule
+`npm install remodule`
 
 ## Usage
 Remodule uses ES6 class syntax to encapsulate actions and reducers inside a module.
