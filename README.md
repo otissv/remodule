@@ -2,7 +2,7 @@
 
 **Taming Redux with modules.**
 
-![logo](images/remodule.png)
+![logo](https://raw.githubusercontent.com/otissv/remodule/master/images/remodule.png)
 
 Remodule works the same as [Redux](http://redux.js.org/) but removes the tedious tasks of organizing, splitting and collating files. Also does away with the need for constants.
 
