@@ -1,7 +1,8 @@
-# Remodule
+# Remodule for Redux
 
 **Taming Redux with modules.**
 
+![logo](images/remodule.png)
 
 Remodule works the same as [Redux](http://redux.js.org/) but removes the tedious task of organizing, splitting and collating files.
 
