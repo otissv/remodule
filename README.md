@@ -78,7 +78,6 @@ const { actions, mapStateToProps, store } = remodule([
   app
 ]);
 
-import remodule from '../../remodule/dist/remodule';
 export default store({
   middleware: [ applyMiddleware(thunk)]
 });
