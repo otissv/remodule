@@ -30,9 +30,9 @@ export class Loading {
 
 These modules are then registered with remodule which returns a store, all actions, a combined reducer and maps all state to props. These can be passed to a connect function such as [react-redux](https://github.com/reactjs/react-redux).
 
-Reducers take the name of class and can be called by any action in the app. Classes do not need to always a have action or reducer.
 
-Initial state can also be added to in the module.
+Reducers take the name of class and can be called by any action in the app. 
+Actions are passed to s with as their class name in camel case. Classes do not need to always a have action or reducer. Initial state can also be added to in the module.
 
 
 
