@@ -1,6 +1,6 @@
 import camel from 'to-camel-case';
 import { compose, createStore } from 'redux';
-// import register from './remodule-register';
+
 
 export default function remodule (register) {
   function reduxMethods (register, method) {
