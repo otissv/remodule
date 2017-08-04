@@ -76,7 +76,7 @@ export function validate(
  *
  * @internal
  */
-export function visitUsingRules(
+function visitUsingRules(
   schema: GraphQLSchema,
   typeInfo: TypeInfo,
   documentAST: DocumentNode,
@@ -111,7 +111,11 @@ export class ValidationContext {
   _variableUsages: Map<NodeWithSelectionSet, Array<VariableUsage>>;
   _recursiveVariableUsages: Map<OperationDefinitionNode, Array<VariableUsage>>;
 
-  constructor(schema: GraphQLSchema, ast: DocumentNode, typeInfo: TypeInfo) {
+  constructor(
+    schema: GraphQLSchema,
+    ast: DocumentNode,
+    typeInfo: TypeInfo
+  ): void {
     this._schema = schema;
     this._ast = ast;
     this._typeInfo = typeInfo;
@@ -147,7 +151,7 @@ export class ValidationContext {
             frags[statement.name.value] = statement;
           }
           return frags;
-        }, {});
+        }, Object.create(null));
     }
     return fragments[name];
   }

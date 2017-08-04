@@ -5,7 +5,7 @@
 Currently contains:
 
 - [`babel-plugin-espower`](https://github.com/power-assert-js/babel-plugin-espower) and the patterns that should be enhanced
-- [`babel-plugin-ava-throws-helper`](https://github.com/avajs/babel-plugin-ava-throws-helper/)
+- [`@ava/babel-plugin-throws-helper`](https://github.com/avajs/babel-plugin-throws-helper/)
 
 
 ## Install

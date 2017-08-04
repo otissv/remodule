@@ -3,7 +3,7 @@
 Transpiles javascript files via babel from src folder to dist folder.
 
 ## Usage
-npm install @@graphql-guru/babel-tasks.  
+npm install @graphql-guru/babel-tasks.  
 
 Add to your package.json scripts.  
 

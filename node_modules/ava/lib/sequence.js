@@ -1,86 +1,93 @@
 'use strict';
-const isPromise = require('is-promise');
-const autoBind = require('auto-bind');
-const AvaError = require('./ava-error');
+
+const beforeExitSubscribers = new Set();
+const beforeExitHandler = () => {
+	for (const subscriber of beforeExitSubscribers) {
+		subscriber();
+	}
+};
+const onBeforeExit = subscriber => {
+	if (beforeExitSubscribers.size === 0) {
+		// Only listen for the event once, no matter how many Sequences are run
+		// concurrently.
+		process.on('beforeExit', beforeExitHandler);
+	}
+
+	beforeExitSubscribers.add(subscriber);
+	return {
+		dispose() {
+			beforeExitSubscribers.delete(subscriber);
+			if (beforeExitSubscribers.size === 0) {
+				process.removeListener('beforeExit', beforeExitHandler);
+			}
+		}
+	};
+};
 
 class Sequence {
-	constructor(tests, bail) {
-		if (!tests) {
-			throw new Error('Sequence items can\'t be undefined');
+	constructor(runnables, bail) {
+		if (!Array.isArray(runnables)) {
+			throw new TypeError('Expected an array of runnables');
 		}
 
-		this.results = [];
-		this.passed = true;
-		this.reason = null;
-		this.tests = tests;
+		this.runnables = runnables;
 		this.bail = bail || false;
-
-		autoBind(this);
 	}
+
 	run() {
-		const length = this.tests.length;
+		const iterator = this.runnables[Symbol.iterator]();
 
-		for (let i = 0; i < length; i++) {
-			// If last item failed and we should bail, return results and stop
-			if (this.bail && !this.passed) {
-				return this._results();
+		let activeRunnable;
+		const beforeExit = onBeforeExit(() => {
+			if (activeRunnable.finishDueToInactivity) {
+				activeRunnable.finishDueToInactivity();
+			}
+		});
+
+		let allPassed = true;
+		const finish = () => {
+			beforeExit.dispose();
+			return allPassed;
+		};
+
+		const runNext = () => {
+			let promise;
+
+			for (let next = iterator.next(); !next.done; next = iterator.next()) {
+				activeRunnable = next.value;
+				const passedOrPromise = activeRunnable.run();
+				if (!passedOrPromise) {
+					allPassed = false;
+
+					if (this.bail) {
+						// Stop if the test failed and bail mode is on.
+						break;
+					}
+				} else if (passedOrPromise !== true) {
+					promise = passedOrPromise;
+					break;
+				}
 			}
 
-			const result = this.tests[i].run();
-
-			// If a Promise returned, we don't need to check for Promises after this test
-			// so we can just use Promise.each() on the rest of the tests
-			if (isPromise(result)) {
-				return result
-					.then(this._addResult)
-					.return(this.tests.slice(i + 1))
-					.each(this._runTest)
-					.catch(AvaError, () => {})
-					.then(this._results);
+			if (!promise) {
+				return finish();
 			}
 
-			try {
-				this._addResult(result);
-			} catch (err) {
-				// In bail mode, don't execute the next tests
-				if (err instanceof AvaError) {
-					return this._results();
+			return promise.then(passed => {
+				if (!passed) {
+					allPassed = false;
+
+					if (this.bail) {
+						// Stop if the test failed and bail mode is on.
+						return finish();
+					}
 				}
 
-				throw err;
-			}
-		}
-
-		return this._results();
-	}
-	_runTest(test) {
-		const result = test.run();
-		return isPromise(result) ? result.then(this._addResult) : this._addResult(result);
-	}
-	_addResult(result) {
-		this.results.push(result);
-
-		if (result.passed === false) {
-			this.passed = false;
-
-			// Only set reason once
-			if (!this.reason) {
-				this.reason = result.reason;
-			}
-
-			if (this.bail) {
-				throw new AvaError('Error in Sequence while in bail mode');
-			}
-		}
-
-		return result;
-	}
-	_results() {
-		return {
-			passed: this.passed,
-			reason: this.reason,
-			result: this.results
+				return runNext();
+			});
 		};
+
+		return runNext();
 	}
 }
 

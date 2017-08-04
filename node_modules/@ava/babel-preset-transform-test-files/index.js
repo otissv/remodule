@@ -11,7 +11,7 @@ module.exports = (context, options) => {
 		}));
 	}
 
-	plugins.push(require('babel-plugin-ava-throws-helper'));
+	plugins.push(require('@ava/babel-plugin-throws-helper'));
 
 	return {plugins};
 };
