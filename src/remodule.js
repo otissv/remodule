@@ -1,7 +1,6 @@
 import camel from 'to-camel-case';
 import { compose, createStore } from 'redux';
 
-
 export default function remodule (register) {
   function reduxMethods (register, method) {
     return function (fn) {
@@ -43,12 +42,12 @@ export default function remodule (register) {
   const reducers = extendReducers => (state = initialState, action) => {
     const extendReducer = extendReducers
       ? Object.keys(extendReducers).reduce(
-          (previous, key) => ({
-            ...previous,
-            ...extendReducers[key]((state.form && state[key]) || {}, action)
-          }),
-          {}
-        )
+        (previous, key) => ({
+          ...previous,
+          ...extendReducers[key]((state.form && state[key]) || {}, action)
+        }),
+        {}
+      )
       : {};
 
     return register.reduce((previous, currentModule) => {
@@ -61,11 +60,14 @@ export default function remodule (register) {
         )(({ previousObj, currentKey, method, Class }) => {
           return {
             ...previousObj,
-            [currentKey]: Class[method](state, action)
+            [currentKey]: (state, action) =>
+              action.type === currentKey && Class[method](state, action)
           };
         });
 
-        return actions[action.type] || state;
+        return actions[action.type] == null
+          ? state
+          : actions[action.type](state, action);
       };
       return {
         ...previous,

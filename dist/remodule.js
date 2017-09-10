@@ -67,10 +67,12 @@ function remodule(register) {
                 method = _ref2.method,
                 Class = _ref2.Class;
 
-            return _extends({}, previousObj, _defineProperty({}, currentKey, Class[method](state, action)));
+            return _extends({}, previousObj, _defineProperty({}, currentKey, function (state, action) {
+              return action.type === currentKey && Class[method](state, action);
+            }));
           });
 
-          return actions[action.type] || state;
+          return actions[action.type] == null ? state : actions[action.type](state, action);
         };
         return _extends({}, previous, _defineProperty({}, moduleName, reducer(state[moduleName], action)));
       }, extendReducer);
