@@ -1,6 +1,6 @@
 # Remodule for Redux
 
-**Taming Redux with modules.**
+**Redux for lazy people**
 
 ![logo](https://raw.githubusercontent.com/otissv/remodule/master/images/remodule.png)
 

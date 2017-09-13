@@ -1,13 +1,9 @@
 {
   "name": "remodule",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Taming Redux with modules",
   "main": "dist/remodule",
-  "keywords": [
-    "redux",
-    "react",
-    "modules"
-  ],
+  "keywords": ["redux", "react", "modules"],
   "scripts": {
     "build": "node ./node_modules/@graphql-guru/babel-tasks/tasks.js",
     "watch": "npm run build -- -w",
