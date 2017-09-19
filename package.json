@@ -5,12 +5,13 @@
   "main": "dist/remodule",
   "keywords": ["redux", "react", "modules"],
   "scripts": {
-    "build": "node ./node_modules/@graphql-guru/babel-tasks/tasks.js",
+    "build": "node ./node_modules/@graphql-guru/babel-tasks --src ./src/lib",
     "watch": "npm run build -- -w",
     "lint": "eslint --quiet './src' || true",
     "test": "ava --fail-fast server/__tests__",
     "test:spec": "ava server/__tests__ -v",
-    "test:watch": "watch 'npm run test' ./server"
+    "test:watch": "watch 'npm run test' ./server",
+    "example": "react-scripts start"
   },
   "dependencies": {
     "@graphql-guru/babel-tasks": "^1.0.2",
@@ -31,5 +32,15 @@
     "redux": "^3.7.1",
     "to-camel-case": "^1.0.0",
     "watch": "^1.0.2"
+  },
+  "devDependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "react-scripts": "1.0.13",
+    "redux": "^3.7.2",
+    "redux-devtools": "^3.4.0",
+    "redux-devtools-dock-monitor": "^1.1.2",
+    "redux-thunk": "^2.2.0"
   }
 }

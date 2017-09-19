@@ -1,8 +1,8 @@
 import camel from 'to-camel-case';
 import { compose, createStore } from 'redux';
 
-function reduxMethods(register, method) {
-  return function(fn) {
+function reduxMethods (register, method) {
+  return function (fn) {
     return Object.keys(register).reduce((previousObj, currentKey) => {
       let Class =
         currentKey !== 'initialState' && currentKey !== 'register'
@@ -16,15 +16,15 @@ function reduxMethods(register, method) {
   };
 }
 
-function typeName(str) {
+function typeName (str) {
   return `set${str}`;
 }
 
-function capitalize(str) {
+function capitalize (str) {
   return `${str[0].toUpperCase()}${str.substr(1, str.length - 1)}`;
 }
 
-export default function remodule(register, { initial }) {
+export default function remodule (register, { initial }) {
   const initialState = register.reduce(
     (previousObj, currentModule) => ({
       ...previousObj,
@@ -49,7 +49,7 @@ export default function remodule(register, { initial }) {
         ...previous,
         [typeName(key)]: payload => ({ type: typeName(key), payload })
       }),
-      initialActions
+      {}
     );
 
   const initialReducers = Object.keys(initialState).reduce(
@@ -69,10 +69,11 @@ export default function remodule(register, { initial }) {
         return {
           ...prev,
           [type]: (state, action) => {
+            console.log(action.type, action.payload);
             if (type !== action.type) return state[mod];
             return typeof action.payload === 'object'
-              ? { ...state[mod], ...action.payload }
-              : { ...state[mod], [key]: action.payload };
+              ? { ...state, [key]: { ...action.payload } }
+              : { ...state, [key]: action.payload };
           }
         };
       }, {})
@@ -106,17 +107,32 @@ export default function remodule(register, { initial }) {
         )(({ previousObj, currentKey, method, Class }) => {
           return {
             ...previousObj,
-            [currentKey]: (state, action) =>
+            [camel(currentKey)]: (state, action) =>
               action.type === currentKey && Class[method](state, action)
           };
         });
+        const type = camel(action.type);
+        const setModuleName = `set${capitalize(moduleName)}`.trim();
 
-        if (initialReducers[action.type]) {
-          return initialReducers[action.type](state, action);
+        if (actions[type] == null) {
+          const modType =
+            type.substr(0, `set${moduleName}`.length) === setModuleName &&
+            type !== setModuleName
+              ? camel(type.substr(setModuleName.length, type.length - 1))
+              : camel(type.substr(3, type.length - 1));
+
+          if (
+            state[modType] ||
+            (state[modType] === '' && initialReducers[action.type])
+          ) {
+            return initialReducers[action.type](state, action);
+          } else if (moduleName == modType) {
+            return initialReducers[action.type](state, action);
+          } else {
+            return state;
+          }
         } else {
-          return actions[action.type] == null
-            ? state
-            : actions[action.type](state, action);
+          return actions[type](state, action);
         }
       };
 
