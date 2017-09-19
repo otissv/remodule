@@ -2,89 +2,24 @@
 
 **Redux for lazy people**
 
-![logo](https://raw.githubusercontent.com/otissv/remodule/master/images/remodule.png)
+![logo](https://raw.githubusercontent.com/otissv/remodule/master/src/images/remodule.png)
 
-Remodule works the same as [Redux](http://redux.js.org/) but removes the tedious tasks of organizing, splitting and collating files. Also does away with the need for constants.
+Warning! Do not read this article if you do not like an easier life.  
 
-## Installation
-`npm install remodule`
+Stop now if you enjoy any of following:
 
-## Usage
-Remodule uses ES6 class syntax to encapsulate actions and reducers inside a module.
+- Lots of boilerplate
+- Doing the same thing in 3 different places
+- Creating lots of action creators and reducers
+- Splitting state management across multiple files and forgetting what is where
+- Missing out a step when setting up state
 
-```
-export const register = 'core';
-export const initialState = { loading: false }
+If on the other hand you want to get on building your app to get to MVP as quickly as possible then please read on.
 
+## What is Remodule
+Remodule is Redux, but removes the tedious tasks of organizing, splitting and collating files. Also does away with the need for constants and creating actions and reducers. Remodule is simply a pattern to encapsulate actions and reducers into modules.
 
-export class Loading {
-  action (bool) {
-    return { type: 'Loading', payload: bool };
-  }
-
-  reducer (state, action) {
-    return { ...state, loading: action.payload };
-  }
-}
-```
-
-These modules are then registered with remodule which returns a store, all actions, a combined reducer and maps all state to props. These can be passed to a connect function such as [react-redux](https://github.com/reactjs/react-redux).
-
-
-Reducers take the name of class and can be called by any action in the app. 
-Actions are passed to s with as their class name in camel case. Classes do not need to always a have action or reducer. Initial state can also be added to in the module.
-
-
-
-## Example
-redux-app.js
-```
-export const register = 'core';
-
-export const initialState = { 
-  loading: false
-}
-
-export class RedirectTo {
-  action (path) {
-    browserHistory.push(path);
-
-    return { type: 'DoNothing', payload: path };
-  }
-}
-
-export class Loading {
-  action (bool) {
-    return { type: 'Loading', payload: bool };
-  }
-
-  reducer (state, action) {
-    return { ...state, loading: action.payload };
-  }
-}
-```
-
-
-store.js
-```
-import { applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import * as redux from 'react-redux';
-import remodule from 'remodule';
-import * as app from './redux-app';
-
-const { actions, mapStateToProps, store } = remodule([
-  // register modules here
-  app
-]);
-
-export default store({
-  middleware: [ applyMiddleware(thunk)]
-});
-
-export const connect = Component =>
-  redux.connect(mapStateToProps, actions)(Component);
-```
+Remodule can be installed via npm
 
 ## License
 MIT
