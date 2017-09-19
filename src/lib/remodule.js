@@ -126,7 +126,7 @@ export default function remodule (register, { initial }) {
             (state[modType] === '' && initialReducers[action.type])
           ) {
             return initialReducers[action.type](state, action);
-          } else if (moduleName == modType) {
+          } else if (moduleName === modType) {
             return initialReducers[action.type](state, action);
           } else {
             return state;

@@ -37,22 +37,19 @@ class App extends Component {
       <div>
         <div>
           <img src={logo} />
-          <h1>Remodule - Redux for lazy people</h1>
+          <h2>{this.props.test1}</h2>
         </div>
-        <div>
-          <h2>Test</h2>
-          <ul>
-            <li>theme: {theme}</li>
-            <li>size: {size}</li>
-            <li>status: {status}</li>
-            <li>living: {living}</li>
-            <li>country: {country}</li>
-            <li>name: {name}</li>
-            Address
-            <li>line1: {line1}</li>
-            <li>line2: {line2}</li>
-          </ul>
-        </div>
+        <ul>
+          <li>theme: {theme}</li>
+          <li>size: {size}</li>
+          <li>status: {status}</li>
+          <li>living: {living}</li>
+          <li>country: {country}</li>
+          <li>name: {name}</li>
+          Address
+          <li>line1: {line1}</li>
+          <li>line2: {line2}</li>
+        </ul>
       </div>
     );
   }
